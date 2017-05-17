@@ -2,7 +2,12 @@
  * Coin Class
  */
 
-ConnectFour.Coin = function() {
+ConnectFour.Coin = function(id) {
+
+    /**
+     * Constructor
+     */
+    this.id = id;
     this.color = null;
     this.startX = null;
     this.radius = null;
