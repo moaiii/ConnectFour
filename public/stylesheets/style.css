@@ -103,7 +103,7 @@ table {
 .instruction {
   margin: 2rem 0;
   opacity: 0;
-  padding: 0.5rem;
+  padding: 2.5rem;
   text-align: center;
   transition: opacity 0.25s linear 1s; }
   .instruction.is-visable {
@@ -197,7 +197,7 @@ table {
   left: 50%;
   opacity: 0.3;
   position: absolute;
-  top: 95px;
+  top: 110px;
   transform: translateX(-50%) rotate(45deg);
   transition: all 0.25s linear;
   width: 40px;
@@ -207,9 +207,9 @@ table {
     border-radius: 50%;
     transform: translateX(-50%) rotate(0deg);
     transition: all 0.25s linear; }
-  @media (max-width: 750px) {
+  @media (max-width: 800px) {
     .instruction__icon {
-      top: 155px; } }
+      top: 170px; } }
 
 .conclusion {
   align-items: center;
