@@ -27,15 +27,17 @@ ConnectFour.App.prototype.setGameState_ = function() {
     $('#button-machine').on('click', function() {
         this.initGame_('machine');  
     }.bind(this));
+
+    $('#button-replay').on('click', function() {
+        this.refreshGame_();  
+    }.bind(this));
 };
 
 ConnectFour.App.prototype.initGame_ = function(opponent) {
-
     if(opponent == 'machine') this.isVsMachine = true;
 
     var ROWS = 6;
     var COLUMNS = 7;
-    this.initCoins_(ROWS, COLUMNS);
     this.initBoard_(ROWS, COLUMNS);
     this.showGameboard_();
 };
@@ -46,20 +48,19 @@ ConnectFour.App.prototype.showGameboard_ = function() {
     $('.outline').addClass('is-active');
 };
 
-ConnectFour.App.prototype.showEndScene = function(rows, columns) {
-    
+ConnectFour.App.prototype.showEndScene = function(winner) {
+    var player = (winner) ? 'player 1' : 'player 2';
+    $('.conclusion').addClass('is-active');
+    $('.conclusion__winner').html(player);
 };
 
-ConnectFour.App.prototype.initCoins_ = function(rows, columns) {
-    for(var i = 0; i < (rows * columns); i++)
-        this.coins.push(new ConnectFour.Coin(i));
+ConnectFour.App.prototype.refreshGame_ = function(rows, columns) {
+    location.reload();
 };
 
 ConnectFour.App.prototype.initBoard_ = function(rows, columns) {
     this.board = new ConnectFour.Board(rows, columns, this.coins);
 };
-
-ConnectFour.App.prototype.resizeScreen = function() {};
 
 window.onload = function() {
     ConnectFour.app = new ConnectFour.App();
@@ -96,7 +97,7 @@ ConnectFour.Coin.prototype.setColor = function() {
  * Board class
  */
 
-ConnectFour.Board = function(ROWS, COLUMNS, coins) {
+ConnectFour.Board = function(ROWS, COLUMNS) {
     /** Board object
      *  board >> columns >> coins
      */
@@ -152,6 +153,15 @@ ConnectFour.Board.prototype.attachEventListeners_ = function() {
     this.board.columns.forEach(function(column){
         $(column.element).on('click', function() {
             scope.addCoin_(this.id);
+
+            /** If machine is selected as the opponent, 
+             * wait and make random move */
+            if(ConnectFour.app.isVsMachine) {
+                setTimeout(function() {
+                    scope.addCoin_(Math.floor((Math.random() * 7)))
+                }, 1000);
+                ;
+            }
         });
     });
 };
@@ -178,7 +188,12 @@ ConnectFour.Board.prototype.updatePlayerInstruction_ = function() {
     if(this.isPlayer1){
         $(this.instruction).html('Player 1');
     } else {
-        $(this.instruction).html('Player 2');
+        if(ConnectFour.app.isVsMachine) {
+            $(this.instruction).html('Machine');
+        } else {
+            $(this.instruction).html('Player 2');
+        }
+        
     }
 
     $('.instruction__icon').toggleClass('player2');
@@ -190,41 +205,25 @@ ConnectFour.Board.prototype.checkWinner_ = function() {
 };
 
 ConnectFour.Board.prototype.matchHorizontal_ = function() {
-    // TODO add another loop to shift the starting position of the check seq.
     for(var row = 0; row < 6; row++) {
         if( this.board.columns[0].coins[row].owner ===
             this.board.columns[1].coins[row].owner ===
             this.board.columns[2].coins[row].owner ===
             this.board.columns[3].coins[row].owner) {
-                console.log('winner horizontal');
-                console.log(
-                    this.board.columns[0].coins[row].element,
-                    this.board.columns[1].coins[row].element,
-                    this.board.columns[2].coins[row].element,
-                    this.board.columns[3].coins[row].element
-                );
-            } else {
-
+                ConnectFour.app.showEndScene(
+                    this.board.columns[0].coins[row].owner);
             }
     }
 };
 
 ConnectFour.Board.prototype.matchVertical_ = function() {
-    // TODO add another loop to shift the starting position of the check seq.
     for(var cols = 0; cols < 7; cols++) {
         if( this.board.columns[cols].coins[0].owner ===
             this.board.columns[cols].coins[1].owner ===
             this.board.columns[cols].coins[2].owner ===
             this.board.columns[cols].coins[3].owner) {
-                console.log('winner vertical');
-                console.log(
-                    this.board.columns[cols].coins[0].element,
-                    this.board.columns[cols].coins[1].element,
-                    this.board.columns[cols].coins[2].element,
-                    this.board.columns[cols].coins[3].element
-                );
-            } else {
-
+                ConnectFour.app.showEndScene(
+                        this.board.columns[0].coins[row].owner);
             }
     }
 };

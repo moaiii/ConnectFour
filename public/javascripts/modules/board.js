@@ -2,7 +2,7 @@
  * Board class
  */
 
-ConnectFour.Board = function(ROWS, COLUMNS, coins) {
+ConnectFour.Board = function(ROWS, COLUMNS) {
     /** Board object
      *  board >> columns >> coins
      */
@@ -58,6 +58,15 @@ ConnectFour.Board.prototype.attachEventListeners_ = function() {
     this.board.columns.forEach(function(column){
         $(column.element).on('click', function() {
             scope.addCoin_(this.id);
+
+            /** If machine is selected as the opponent, 
+             * wait and make random move */
+            if(ConnectFour.app.isVsMachine) {
+                setTimeout(function() {
+                    scope.addCoin_(Math.floor((Math.random() * 7)))
+                }, 1000);
+                ;
+            }
         });
     });
 };
@@ -84,7 +93,12 @@ ConnectFour.Board.prototype.updatePlayerInstruction_ = function() {
     if(this.isPlayer1){
         $(this.instruction).html('Player 1');
     } else {
-        $(this.instruction).html('Player 2');
+        if(ConnectFour.app.isVsMachine) {
+            $(this.instruction).html('Machine');
+        } else {
+            $(this.instruction).html('Player 2');
+        }
+        
     }
 
     $('.instruction__icon').toggleClass('player2');
@@ -96,41 +110,25 @@ ConnectFour.Board.prototype.checkWinner_ = function() {
 };
 
 ConnectFour.Board.prototype.matchHorizontal_ = function() {
-    // TODO add another loop to shift the starting position of the check seq.
     for(var row = 0; row < 6; row++) {
         if( this.board.columns[0].coins[row].owner ===
             this.board.columns[1].coins[row].owner ===
             this.board.columns[2].coins[row].owner ===
             this.board.columns[3].coins[row].owner) {
-                console.log('winner horizontal');
-                console.log(
-                    this.board.columns[0].coins[row].element,
-                    this.board.columns[1].coins[row].element,
-                    this.board.columns[2].coins[row].element,
-                    this.board.columns[3].coins[row].element
-                );
-            } else {
-
+                ConnectFour.app.showEndScene(
+                    this.board.columns[0].coins[row].owner);
             }
     }
 };
 
 ConnectFour.Board.prototype.matchVertical_ = function() {
-    // TODO add another loop to shift the starting position of the check seq.
     for(var cols = 0; cols < 7; cols++) {
         if( this.board.columns[cols].coins[0].owner ===
             this.board.columns[cols].coins[1].owner ===
             this.board.columns[cols].coins[2].owner ===
             this.board.columns[cols].coins[3].owner) {
-                console.log('winner vertical');
-                console.log(
-                    this.board.columns[cols].coins[0].element,
-                    this.board.columns[cols].coins[1].element,
-                    this.board.columns[cols].coins[2].element,
-                    this.board.columns[cols].coins[3].element
-                );
-            } else {
-
+                ConnectFour.app.showEndScene(
+                        this.board.columns[0].coins[row].owner);
             }
     }
 };

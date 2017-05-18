@@ -34,11 +34,19 @@
     display: block;
     margin: 0 auto;
 }
-.introduction__option {
-    width: 200px;
+.button-option {
+    width: 150px;
     height: 100px;
     background-color: white;
+    display: block;
     text-align: center;
+    margin: 50px auto;
+    font-size: 1rem;
+
+    &:hover {
+        background-color: $black;
+        color: white;
+    }
 }
 
 .instruction {
@@ -71,6 +79,7 @@
     transition: opacity 1s ease-in 1s;
     margin: 0 auto;
     position: relative;
+    max-width: 600px;
 
     &.is-visable {
         opacity: 1;
@@ -81,7 +90,7 @@
     font-size: 0;
     margin: 1px;
     height: 100%;
-    width: calc(100%/7.15);
+    width: calc(100%/7.2);
 
     @media (max-width: 950px) {
         width: calc(100%/7.3);
@@ -172,4 +181,29 @@
         background-color: yellow;
         transform: translateX(-50%) rotate(0deg);
     }
+}
+
+.conclusion {
+    display: block;;
+    position: absolute;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    opacity: 0;
+    z-index: -1;
+    transition: all 0.5s linear;
+
+    &.is-active {
+        background: white;
+        padding-top: 20%;
+        opacity: 1;
+        z-index: 2;
+    }
+}
+.conclusion__winner {
+    text-align: center;
+}
+.conclusion__wins {
+    text-align: center;
 }
