@@ -1,29 +1,53 @@
 /**
- * Global game object class
+ * Global game class
  */
 
 var ConnectFour = {};
 
 ConnectFour.App = function() {
-    this.initGame_();
-    this.DEBUG = true;
-};
 
-ConnectFour.App.prototype.initGame_ = function() {
-    var ROWS = 6;
-    var COLUMNS = 7;
-
+    /** Game variables */
+    this.player1 = false;
+    this.isVsMachine = false;
     this.board = [];
     this.coins = [];
-    this.initBoard_(ROWS, COLUMNS);
-    this.initCoins_(ROWS, COLUMNS);
+    this.DEBUG = true;
 
-    document.onmousemove = this.getMouseX;
-    document.onclick = this.clickEvent;
+    /** Get game mode - Player vs Man / Machine? */
+    this.setGameState_();
 };
 
-ConnectFour.App.prototype.initBoard_ = function(rows, columns) {
-    this.board = new ConnectFour.Board(rows, columns);
+ConnectFour.App.prototype.setGameState_ = function() {
+    var that = this;
+
+    $('#button-man').on('click', function() {
+        this.initGame_('man');  
+    }.bind(this));
+
+    $('#button-machine').on('click', function() {
+        this.initGame_('machine');  
+    }.bind(this));
+};
+
+ConnectFour.App.prototype.initGame_ = function(opponent) {
+
+    if(opponent == 'machine') this.isVsMachine = true;
+
+    var ROWS = 6;
+    var COLUMNS = 7;
+    this.initCoins_(ROWS, COLUMNS);
+    this.initBoard_(ROWS, COLUMNS);
+    this.showGameboard_();
+};
+
+ConnectFour.App.prototype.showGameboard_ = function() {
+    $('.introduction').addClass('is-hidden');
+    $('.gameboard, .instruction__title, .instruction').addClass('is-visable');
+    $('.outline').addClass('is-active');
+};
+
+ConnectFour.App.prototype.showEndScene = function(rows, columns) {
+    
 };
 
 ConnectFour.App.prototype.initCoins_ = function(rows, columns) {
@@ -31,14 +55,9 @@ ConnectFour.App.prototype.initCoins_ = function(rows, columns) {
         this.coins.push(new ConnectFour.Coin(i));
 };
 
-ConnectFour.App.prototype.getMouseX = function(event) {
-    return event.clientX;
+ConnectFour.App.prototype.initBoard_ = function(rows, columns) {
+    this.board = new ConnectFour.Board(rows, columns, this.coins);
 };
-
-ConnectFour.App.prototype.clickEvent = function(event) {
-    console.log(event.clientX);
-    return event.clientX;
-}
 
 ConnectFour.App.prototype.resizeScreen = function() {};
 

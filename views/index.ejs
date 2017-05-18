@@ -5,17 +5,28 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <div class="introduction">
-      <h2 class="introduction__txt">Welcome to Connect Four</h2>
-      <input class="introduction__name" type="text">
-      <button class="introduction__start-button">Start</button>
+    <div class="header">
+      <h1 class="instruction__title"><%= title %></h1>
+      <div class="instruction__icon"></div>
+      <h2 class="instruction">Player 1</h2>
     </div>
+    <div class="introduction">
+      <h1 class="introduction__title"><%= title %></h1>
+      <h3 class="introduction__txt">Choose your opponent...</h3>
+      <div class="introduction__button-container">
+        <button class="introduction__option" id="button-man">Man</button>
+        <button class="introduction__option" id="button-machine">Machine</button>
+      </div>
+    </div>
+    <svg class="svg__container">
+      <rect class="outline" x="25%" y="25%" width="50%" height="50%" stroke-dasharray="50">
+    </svg>
     <div class="gameboard">
-      
+      <!--Javascript creates board pieces dynamically - see board.js-->
     </div>
     <div class="conclusion">
-
+      <h1 class="conclusion__winner">player</h1>
+      <h1 class="conclusion__wins">wins!</h1>
     </div>
 
     <script type="text/javascript" src="/javascripts/vendor/jquery.min.js"></script>
